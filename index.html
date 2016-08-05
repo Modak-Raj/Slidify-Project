@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Motot Trend Cars Data Insights</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Motot Trend Cars Data Insights">
+  <meta name="author" content="Modak Raj">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Motot Trend Cars Data Insights</h1>
+    <h2></h2>
+    <p>Modak Raj<br/>Healthcare</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Overview</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>This presentation gives a basic over view of Shiny app, about the Motor Trend Cars data.
+1. Leveraging basic functions in R we can get some really interesting findings from the data.</p>
+
+<ol>
+<li><p>The app analysese the relationship between fuel economy and other configurational features of the car such as number of cylinders in the motor, output power etc.</p></li>
+<li><p>We can appreciate the output in a few formats i.e. Boxplot and Regression analysis.</p></li>
+<li><p>You can find the app here: <a href="https://modakraj.shinyapps.io/Shiny/">https://modakraj.shinyapps.io/Shiny/</a> </p></li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Data</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Description
+The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models).</p>
+
+<p>Parameters:</p>
+
+<pre><code class="r"> library(datasets)
+ head(mtcars, 3)
+</code></pre>
+
+<pre><code> ##                mpg cyl disp  hp drat    wt  qsec vs am gear carb
+ ## Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+ ## Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+ ## Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Significance and Application</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The different configurational features of the car may be  measured on diferent scales but in combination might give some key performance insights.</p>
+
+<ol>
+<li><p>Fuel consumption - How does this get affected based on the transmission.</p></li>
+<li><p>Horsepower - More cylinder leads to higher horsepower, is that related?</p></li>
+<li><p>How does the car weight affect the time for quarter miles?</p></li>
+</ol>
+
+<p>These are a few KPI for adjudging the performance of the car.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="idlibrar" style="background:;">
+  <hgroup>
+    <h2>Analysis</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Code File:</p>
+
+<pre><code class="r">formulaTextPoint &lt;- reactive({
+    paste(&quot;mpg ~&quot;, &quot;as.integer(&quot;, input$variable, &quot;)&quot;)  })
+
+  fit &lt;- reactive({
+    lm(as.formula(formulaTextPoint()), data=mpgData)  })
+  ...
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): &#39;...&#39; used in an incorrect context
+</code></pre>
+
+<pre><code class="r">  output$fit &lt;- renderPrint({
+    summary(fit()) })
+</code></pre>
+
+<pre><code>## Error in output$fit &lt;- renderPrint({: object &#39;output&#39; not found
+</code></pre>
+
+<pre><code class="r">  output$mpgPlot &lt;- renderPlot({
+    with(mpgData, {
+      plot(as.formula(formulaTextPoint()))
+      abline(fit(), col=2)
+    })  })
+</code></pre>
+
+<pre><code>## Error in output$mpgPlot &lt;- renderPlot({: object &#39;output&#39; not found
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Overview'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Data'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Significance and Application'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Analysis'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
